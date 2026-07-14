@@ -13,7 +13,7 @@ def composite_identity(f, g):
     >>> b1(4)                            # (4 + 1) ** 2 != 4 ** 2 + 1
     False
     """
-    "*** YOUR CODE HERE ***"
+    return lambda x:f(g(x))==g(f(x))
 
 
 def sum_digits(y):
@@ -59,7 +59,13 @@ def count_cond(condition):
     >>> count_primes(20)   # 2, 3, 5, 7, 11, 13, 17, 19
     8
     """
-    "*** YOUR CODE HERE ***"
+    def counter(N):
+        count=0
+        for i in range(1,N+1):
+            if condition(N,i):
+                count+=1
+        return count
+    return counter
 
 
 def multiple(a, b):
@@ -70,7 +76,11 @@ def multiple(a, b):
     >>> multiple(14, 21)
     42
     """
-    "*** YOUR CODE HERE ***"
+    n=1
+    while True:
+        if n%a==0 and n%b==0:
+            return n
+        n+=1
 
 
 
@@ -100,5 +110,18 @@ def cycle(f1, f2, f3):
     >>> do_two_cycles(1)
     19
     """
-    "*** YOUR CODE HERE ***"
+    def g(n):
+        def h(x):
+            for i in range(n):
+                if i%3==0:
+                    x=f1(x)
+                elif i%3==1:
+                    x=f2(x)
+                else:
+                    x=f3(x)
+            return x
+        return h
+    return g
+
+
 
