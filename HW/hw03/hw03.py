@@ -24,7 +24,15 @@ def num_eights(n):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+
+    if n==0:
+        return 0
+    else:
+        if n%10==8:
+            return 1+num_eights(n//10)
+        else:
+            return 0+num_eights(n//10)
+    
 
 
 def digit_distance(n):
@@ -46,7 +54,12 @@ def digit_distance(n):
     ...       ['For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n<10:
+        return 0
+    else:
+        last=n%10
+        second_last=n//10%10
+        return abs(last-second_last)+digit_distance(n//10)
 
 
 def interleaved_sum(n, odd_func, even_func):
@@ -70,7 +83,18 @@ def interleaved_sum(n, odd_func, even_func):
     >>> check(HW_SOURCE_FILE, 'interleaved_sum', ['BitAnd', 'BitOr', 'BitXor']) # ban bitwise operators, don't worry about these if you don't know what they are
     True
     """
-    "*** YOUR CODE HERE ***"
+    def sum_odd(i):
+        if i>n:
+            return 0
+        else:
+            return odd_func(i)+sum_even(i+1)
+    def sum_even(i):
+        if i>n:
+            return 0
+        else:
+            return even_func(i)+sum_odd(i+1)
+    return sum_odd(1) 
+        
 
 
 def next_smaller_dollar(bill):
@@ -106,7 +130,18 @@ def count_dollars(total):
     >>> check(HW_SOURCE_FILE, 'count_dollars', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def count_partitions(n,m):
+        if n==0:
+            return 1
+        elif n<0:
+            return 0
+        elif m==1:
+            return 1
+        else:
+            with_m=count_partitions(n-m,m)
+            without_m=count_partitions(n,next_smaller_dollar(m))
+            return with_m+without_m
+    return count_partitions(total,100)
 
 
 def next_larger_dollar(bill):
@@ -142,7 +177,20 @@ def count_dollars_upward(total):
     >>> check(HW_SOURCE_FILE, 'count_dollars_upward', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    
+    def count_partitions(n,m):
+        if n==0:
+            return 1
+        elif n<0:
+            return 0
+        elif m==1:
+            return 1
+        else:
+            with_m=count_partitions(n-m,m)
+            without_m=count_partitions(n,next_smaller_dollar(m))
+            return with_m+without_m
+    return count_partitions(total,100)
+
 
 
 def print_move(origin, destination):
@@ -177,7 +225,13 @@ def move_stack(n, start, end):
     Move the top disk from rod 1 to rod 3
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
-    "*** YOUR CODE HERE ***"
+    if n == 1:
+        print_move(start, end)          
+    else:
+        other = 6 - start - end         
+        move_stack(n-1, start, other)    
+        print_move(start, end)          
+        move_stack(n-1, other, end)      
 
 
 from operator import sub, mul
@@ -193,5 +247,7 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    return (lambda f: f(f))(
+        lambda f: lambda n: 1 if n == 0 else mul(n, f(f)(sub(n, 1)))
+    )
 
